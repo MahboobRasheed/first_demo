@@ -1,48 +1,42 @@
 #include <iostream>
 using namespace std;
-
-void displayArrangement(int arrangement[10][15]) {
-    cout << "\t\tSeating Arrangement\t\t" << endl;
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 15; j++) {
-            cout << arrangement[i][j] << " ";
-        }
-        cout << endl;
+int recursiveBinarySearch(int arr[], int left, int right, int target) 
+{
+    if (left > right) {
+        return -1; 
     }
+
+    int mid = left + (right - left) / 2;
+    if (arr[mid] == target) {
+        return mid;
+    }
+    if (target < arr[mid]) {
+        return recursiveBinarySearch(arr, left, mid - 1, target);
+    }
+    return recursiveBinarySearch(arr, mid + 1, right, target);
 }
 
 int main() {
-    int arrangement[10][15] = {0};
-    
-    while (true) {
-        displayArrangement(arrangement);
-        
-        cout << "Enter the row (1-10) and the seat number (1-15) for booking (Enter 0 0 to exit):" << endl;
-        int row, seat;
-        cout << "Row: ";
-        cin >> row;
-        cout << "Seat: ";
-        cin >> seat;
-        if (row == 0 && seat == 0) {
-            break;
-        }
-        row--;
-        seat--;
-        if (row < 0 || row >= 10 || seat < 0 || seat >= 15) {
-            cout << "You entered an invalid row or seat number!!!" << endl;
-            continue; 
-        }
-        
-        if (arrangement[row][seat] == 0) {
-            arrangement[row][seat] = 1;
-            cout << "You booked the seat." << endl;
-        } else {
-            cout << "This seat is already booked." << endl;
-        }
+    int n, target;
+    cout << "Enter the number of elements in the array: ";
+    cin >> n;
+
+    int arr[n];
+    cout << "Enter the elements of the sorted array:\n";
+    for (int i = 0; i < n; i++) 
+    {
+        cin >> arr[i];
     }
-    
-    cout << "Exiting program. Final seating arrangement:" << endl;
-    displayArrangement(arrangement);
-    
+    cout << "Enter the target element: ";
+    cin >> target;
+    int result = recursiveBinarySearch(arr, 0, n - 1, target);
+    if (result != -1) 
+    {
+        cout << "Target element found at index: " << result << endl;
+    } else 
+    {
+        cout << "Target element not found." << endl;
+    }
+
     return 0;
 }

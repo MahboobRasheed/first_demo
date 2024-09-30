@@ -1,41 +1,66 @@
 #include<iostream>
 using namespace std;
-
-// Define the structure for a node
 struct Node {
-    int data;          // Data to store
-    Node* next;        // pointer to next node
+    int data;       
+    Node* next;      
 };
-
-// Function to insert a node at the end
 void insertAtEnd(Node** head, int newData) {
-    // Allocate memory for new node
-    Node* newNode = new Node();
-    
-    // Assign data to the new node
+    Node* newNode = new Node();  
     newNode->data = newData;
-    
-    // The new node is going to be the last node, so make its next point to NULL
     newNode->next = NULL;
 
-    // If the linked list is empty, make the new node the head
     if (*head == NULL) {
-        *head = newNode;
+        *head = newNode; 
         return;
     }
 
-    // Otherwise, traverse till the last node
-    Node* last = *head;
+    Node* last = *head;  
     while (last->next != NULL) {
         last = last->next;
     }
-
-    // Change the next of last node to point to the new node
-    last->next = newNode;
+    last->next = newNode;  
 }
+void deleteNode(Node** head, int key) {
+    Node* temp = *head;
+    Node* prev = NULL;
 
-// Function to print the linked list
+    if (temp != NULL && temp->data == key) {
+        *head = temp->next;  
+        delete temp;        
+        cout << "Node with value " << key << " deleted successfully." << endl;
+        return;
+    }
+
+    while (temp != NULL && temp->data != key) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        cout << "Value " << key << " not found in the list." << endl;
+        return;
+    }
+
+    prev->next = temp->next;  
+    delete temp;              
+    cout << "Node with value " << key << " deleted successfully." << endl;
+}
+bool searchNode(Node* head, int key) {
+    Node* current = head;
+    while (current != NULL) {
+        if (current->data == key) {
+            return true;  
+        }
+        current = current->next;
+    }
+    return false; 
+}
 void printList(Node* node) {
+    if (node == NULL) {
+        cout << "The list is empty." << endl;
+        return;
+    }
+
     while (node != NULL) {
         cout << node->data << " -> ";
         node = node->next;
@@ -44,26 +69,27 @@ void printList(Node* node) {
 }
 
 int main() {
-    cout << "\n\n****************** Lab 05: Linked List ****************\n\n" << endl;
-
-    int n, value;
-
-    // Initialize head to NULL
     Node* head = NULL;
-
-    // Input the number of elements
-    cout << "Enter the number of elements: ";
-    cin >> n;
-
-    // Insert each element at the end of the linked list
-    for (int i = 0; i < n; i++) {
+    int value;
+    cout << "Enter values for 5 nodes:" << endl;
+    for (int i = 0; i <5 ; i++) {
         cout << "Enter value for node " << i + 1 << ": ";
         cin >> value;
         insertAtEnd(&head, value);
     }
-
-    // Print the linked list
     cout << "The linked list is: ";
+    printList(head);
+    cout << "Enter value to search: ";
+    cin >> value;
+    if (searchNode(head, value)) {
+        cout << "Value " << value << " found in the list." << endl;
+    } else {
+        cout << "Value " << value << " not found in the list." << endl;
+    }
+    cout << "Enter value to delete: ";
+    cin >> value;
+    deleteNode(&head, value);
+    cout << "The linked list after deletion is: ";
     printList(head);
 
     return 0;
